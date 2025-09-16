@@ -1,21 +1,22 @@
 import { Router } from "express";
-import { TweetService } from "./tweet.service.js";
+import { NoteService } from "./notes.service.js";
 
 //Создаем роутер
 const router = Router()
 
 //Создаем экземляр сервиса
-const tweetService = new TweetService()
+const noteService = new NoteService()
 
 //Создаем твит через сервис, отправляем твит на фронт
 router.post('/', (req, res) => {
+    console.log('Body:', req.body);
     //обработка пустого твита
     if (!req.body?.text?.length){
         return res.status(400).json({message : "Text is required!"})
     }
 
-    const tweet = tweetService.createTweet(req.body)
-    res.status(200).json(tweet)
+    const note = noteService.createNote(req.body)
+    res.status(200).json(note)
 })
 
-export const tweetRouter = router
+export const noteRouter = router
