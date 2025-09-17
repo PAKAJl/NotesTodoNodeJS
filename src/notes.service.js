@@ -9,4 +9,8 @@ export class NoteService{
         console.log(note)
         return note
     }
+
+    getNotes(){
+        return this.db.notes
+    }
 }

@@ -1,17 +1,15 @@
 import express from "express"
 import { noteRouter } from "./src/notes.controller.js"
 import dotenv from "dotenv"
+import cors from "cors"
 
 dotenv.config()
 //Подключаем Express
 const app = express()
 
 async function main() {
-
-    app.use((req, res, next) => {
-  console.log('Пришёл запрос:', req.method, req.url, 'Content-Type:', req.headers['content-type']);
-  next();
-});
+    app.use(cors())
+    
     //Поддержка json
     app.use(express.json())
 
