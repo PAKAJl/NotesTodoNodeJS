@@ -13,4 +13,8 @@ export class NoteService{
     getNotes(){
         return this.db.notes
     }
+
+    deleteNote(id){
+        return this.db.delete(id)
+    }
 }

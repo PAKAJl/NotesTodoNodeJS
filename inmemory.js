@@ -14,10 +14,10 @@ export class inMemoryDB{
         this.readNotes()
     }
 
-    create(note){
+    create(info){
         this.notes.push({
             id : this.nextId,
-            note : note
+            info : info
         })
         this.nextId++
         console.log(this.notes)
@@ -41,7 +41,14 @@ export class inMemoryDB{
     }
 
     delete(id){
-        this.notes = this.notes.splice(note => note.id != id)
+        
+        const initialLength = this.notes.length
+        this.notes = this.notes.filter(note => note.id != id)
+        this.saveNotes()
+        if (initialLength === this.notes.length){
+            return "404"
+        }
+        
         return this.notes
     }
 

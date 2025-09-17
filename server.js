@@ -9,7 +9,7 @@ const app = express()
 
 async function main() {
     app.use(cors())
-    
+    app.options('/api/notes/:id', cors());
     //Поддержка json
     app.use(express.json())
 

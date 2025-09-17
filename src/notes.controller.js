@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { json, Router } from "express";
 import { NoteService } from "./notes.service.js";
 
 //Создаем роутер
@@ -20,5 +20,16 @@ router.post('/', (req, res) => {
 router.get('/', (req, res) => {
     res.status(200).json(noteService.getNotes())
 })
+
+router.delete("/:id", (req, res) => {
+    const noteId = parseInt(req.params.id)
+
+    const result = noteService.deleteNote(noteId)
+    console.log(result)
+    if (result == "404"){
+        return res.status(404).json({ message: 'Заметка не найдена' });
+    }
+    return res.status(200).json({message: "Задача удалена"})
+  })
 
 export const noteRouter = router
