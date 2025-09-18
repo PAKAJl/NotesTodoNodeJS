@@ -18,7 +18,6 @@ async function main() {
 
     //Обрабатываем не существующие роуты
     app.use((req, res) => {
-        console.log('Body:', req.body);
         res.status(404).json({message: "Not Found"})
 
     })

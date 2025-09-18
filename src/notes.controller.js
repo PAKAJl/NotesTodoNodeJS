@@ -1,4 +1,4 @@
-import { json, Router } from "express";
+import { Router } from "express";
 import { NoteService } from "./notes.service.js";
 
 //Создаем роутер
@@ -31,5 +31,12 @@ router.delete("/:id", (req, res) => {
     }
     return res.status(200).json({message: "Задача удалена"})
   })
+  
+ router.put("/:id", (req, res) => {
+
+    const result = noteService.updateNote(req.params.id, req.body)
+    console.log(result)
+    return res.status(200).json({message: "Задача обновлена"})
+})
 
 export const noteRouter = router

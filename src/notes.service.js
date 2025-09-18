@@ -17,4 +17,8 @@ export class NoteService{
     deleteNote(id){
         return this.db.delete(id)
     }
+
+    updateNote(id, note){
+        return this.db.updateNote(id, note)
+    }
 }

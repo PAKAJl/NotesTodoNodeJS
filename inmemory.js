@@ -1,6 +1,7 @@
 import fs from "fs"
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { console } from "inspector";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -75,5 +76,18 @@ export class inMemoryDB{
             this.notes = []
         }
         
+    }
+
+    updateNote(id, note){
+        console.log(id)
+        console.log(note)
+        let editableNote = this.notes.find((note) => note.id == id)
+        console.log(editableNote)
+        if (!editableNote){
+           return "404" 
+        }
+        editableNote.info = note
+        this.saveNotes()
+        return "Заметка обновлена"
     }
 }
