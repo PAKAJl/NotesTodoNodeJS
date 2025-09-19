@@ -1,4 +1,4 @@
-import { inMemoryDB } from "../inmemory.js";
+import { inMemoryDB } from "../utils/inmemory.js";
 
 //класс сервиса
 export class NoteService{

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { NoteService } from "./notes.service.js";
+import { NoteService } from "../services/notes.service.js";
 
 //Создаем роутер
 const router = Router()

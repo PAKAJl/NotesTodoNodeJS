@@ -1,13 +1,24 @@
 import express from "express"
-import { noteRouter } from "./src/notes.controller.js"
+import { noteRouter } from "./src/controllers/notes.controller.js"
 import dotenv from "dotenv"
 import cors from "cors"
+import db from './models/index.js';
 
 dotenv.config()
 //Подключаем Express
 const app = express()
 
 async function main() {
+    
+
+try {
+  await db.sequelize.sync({ alter: true }); // или { force: true } для пересоздания
+  console.log('База данных синхронизирована');
+} catch (err) {
+  console.error('Ошибка при синхронизации:', err);
+}
+
+
     app.use(cors())
     app.options('/api/notes/:id', cors());
     //Поддержка json
