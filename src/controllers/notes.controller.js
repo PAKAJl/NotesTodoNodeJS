@@ -1,42 +1,54 @@
 import { Router } from "express";
 import { NoteService } from "../services/notes.service.js";
 
-//Создаем роутер
 const router = Router()
-
-//Создаем экземляр сервиса
 const noteService = new NoteService()
 
-//Создаем твит через сервис, отправляем твит на фронт
-router.post('/', (req, res) => {
-    if (!req.body?.text?.length){
-        return res.status(400).json({message : "Text is required!"})
-    }
 
-    const note = noteService.createNote(req.body)
-    res.status(200).json(note)
+router.post('/', async (req, res, next) => {
+    try{
+        const note = await noteService.createNote(req.body)
+        res.status(201).json(note)
+    }catch(err){
+        next(err)
+    }
 })
 
-router.get('/', (req, res) => {
-    res.status(200).json(noteService.getNotes())
+router.get('/', async (req, res, next) => {
+    
+    try{
+        res.status(200).json( await noteService.getNotes())
+    }catch(err){
+        next(err)
+    }
 })
 
-router.delete("/:id", (req, res) => {
-    const noteId = parseInt(req.params.id)
+router.delete("/:id", async (req, res, next) => {
+    try{
+        const noteId = parseInt(req.params.id)
 
-    const result = noteService.deleteNote(noteId)
-    console.log(result)
-    if (result == "404"){
-        return res.status(404).json({ message: 'Заметка не найдена' });
+        const result = await noteService.deleteNote(noteId)
+        if (!result){
+            return res.status(404).json({ message: 'Заметка не найдена' });
+        }   
+        return res.status(200).json({message: "Задача удалена", data: result})
+    }catch(err){
+        next(err)
     }
-    return res.status(200).json({message: "Задача удалена"})
+    
   })
   
- router.put("/:id", (req, res) => {
-
-    const result = noteService.updateNote(req.params.id, req.body)
-    console.log(result)
-    return res.status(200).json({message: "Задача обновлена"})
+ router.put("/:id", async (req, res, next) => {
+    try{
+        const noteId = parseInt(req.params.id)
+        const result = await noteService.updateData(noteId, req.body)
+        if (!result){
+            return res.status(404).json({message: "Задача не найдена"})
+        }
+        return res.status(200).json({message: "Задача обновлена", data: result})
+    }catch(err){
+        next(err)
+    }
 })
 
 export const noteRouter = router

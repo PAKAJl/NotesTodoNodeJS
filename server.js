@@ -3,6 +3,7 @@ import { noteRouter } from "./src/controllers/notes.controller.js"
 import dotenv from "dotenv"
 import cors from "cors"
 import db from './models/index.js';
+import { errorHandler } from './src/middlewares/errorHandler.js';
 
 dotenv.config()
 //Подключаем Express
@@ -17,29 +18,28 @@ try {
 } catch (err) {
   console.error('Ошибка при синхронизации:', err);
 }
-
-
     app.use(cors())
-    app.options('/api/notes/:id', cors());
-    //Поддержка json
     app.use(express.json())
-
-    //Обрабатываем корневой роут
     app.use("/api/notes", noteRouter)
+    
+    app.use((req, res, next) => {
+        const error = new Error("Not Found");
+        error.statusCode = 404;
+        next(error);
+    });
 
-    //Обрабатываем не существующие роуты
-    app.use((req, res) => {
-        res.status(404).json({message: "Not Found"})
+    app.use(errorHandler);
 
-    })
 
-    // eslint-disable-next-line no-undef
     const port = process.env.PORT || 4200
-    //Включаем сервер
     app.listen(port, () => {
         console.log('Server is running on port ' + port)
     })
 
 }
 
-main()
+
+main().catch((err) => {
+  console.error('Ошибка при запуске приложения:', err);
+  process.exit(1); 
+});

@@ -4,6 +4,11 @@ export default (sequelize, DataTypes) =>{
         isCompleted : DataTypes.BOOLEAN,
         userId : DataTypes.INTEGER
     }) 
-    console.log('Инициализируем модель ');
+    Note.associate = (models) =>{
+        Note.belongsTo(models.User, {
+            foreingKey: "userId",
+            as: 'user'
+        })
+    }
     return Note
 }

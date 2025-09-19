@@ -1,13 +1,15 @@
-import { inMemoryDB } from "../utils/inmemory.js";
-
-//класс сервиса
 export class NoteService{
-    db = new inMemoryDB()
-    //Создаем твит
+    constructor(db){
+        this.db = db
+    }
+
     createNote(note){
-        this.db.create(note)
-        console.log(note)
-        return note
+        if (!note || !note.text){
+            throw new Error('Note text is required');
+        }else{
+            this.db.create(note)
+            return note
+        }
     }
 
     getNotes(){
@@ -15,10 +17,18 @@ export class NoteService{
     }
 
     deleteNote(id){
-        return this.db.delete(id)
+        const deletedNote = this.db.delete(id)
+        if (!deletedNote){
+            return Error(`Note with id ${id} not found`)
+        }
+        return deletedNote
     }
 
-    updateNote(id, note){
-        return this.db.updateNote(id, note)
+    updateData(id, note){
+        const updatedNote = this.db.updateNote(id, note)
+        if (!updatedNote){
+            return Error(`Note with id ${id} not found`)
+        }
+        return updatedNote
     }
 }
