@@ -1,3 +1,6 @@
+import db from '../../models/index.js';
+const { Note } = db;
+
 export class NoteService{
     constructor(db){
         this.db = db
@@ -7,17 +10,17 @@ export class NoteService{
         if (!note || !note.text){
             throw new Error('Note text is required');
         }else{
-            this.db.create(note)
-            return note
+            const newNote = Note.create(note)
+            return newNote
         }
     }
 
     getNotes(){
-        return this.db.notes
+        return Note.findAll()
     }
 
     deleteNote(id){
-        const deletedNote = this.db.delete(id)
+        const deletedNote = Note.findByPk(id).destroy()
         if (!deletedNote){
             return Error(`Note with id ${id} not found`)
         }
@@ -25,7 +28,7 @@ export class NoteService{
     }
 
     updateData(id, note){
-        const updatedNote = this.db.updateNote(id, note)
+        const updatedNote = Note.findByPk(id).update(note)
         if (!updatedNote){
             return Error(`Note with id ${id} not found`)
         }

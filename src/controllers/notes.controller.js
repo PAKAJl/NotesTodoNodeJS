@@ -1,11 +1,16 @@
+console.log('Импорт работает!');
+
 import { Router } from "express";
 import { NoteService } from "../services/notes.service.js";
+import { createNoteSchema } from '../validators/note.validator.js';
+import validate from '../middlewares/validate.js';
+
 
 const router = Router()
 const noteService = new NoteService()
 
 
-router.post('/', async (req, res, next) => {
+router.post('/', validate(createNoteSchema), async (req, res, next) => {
     try{
         const note = await noteService.createNote(req.body)
         res.status(201).json(note)
@@ -15,7 +20,6 @@ router.post('/', async (req, res, next) => {
 })
 
 router.get('/', async (req, res, next) => {
-    
     try{
         res.status(200).json( await noteService.getNotes())
     }catch(err){
@@ -23,7 +27,7 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id",validate(createNoteSchema), async (req, res, next) => {
     try{
         const noteId = parseInt(req.params.id)
 
@@ -38,7 +42,7 @@ router.delete("/:id", async (req, res, next) => {
     
   })
   
- router.put("/:id", async (req, res, next) => {
+ router.put("/:id",validate(createNoteSchema), async (req, res, next) => {
     try{
         const noteId = parseInt(req.params.id)
         const result = await noteService.updateData(noteId, req.body)
